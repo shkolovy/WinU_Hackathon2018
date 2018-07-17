@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.2">
+  <CommandSet xml:lang="en-us" Name="CustomCommands">
+    <CommandPrefix> Listen To Me </CommandPrefix>
+    <Example> Watch a video </Example>
+
+    <Command Name="WatchVideoCommand">
+      <Example> Watch a video </Example>
+      <ListenFor> Watch video </ListenFor>
+      <Feedback> Opening your favourite app </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="OpenWebsiteCommand">
+      <Example> Open a website </Example>
+      <ListenFor> Open [some] website </ListenFor>
+      <Feedback> Opening your favourite website </Feedback>
+      <Navigate/>
+    </Command>
+    
+  </CommandSet>
+
+</VoiceCommands>
