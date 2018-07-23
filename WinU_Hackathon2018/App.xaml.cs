@@ -31,7 +31,7 @@ namespace WinU_Hackathon2018
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
-            CortanaFunctions.RegisterVCD();
+            
         }
 
         /// <summary>
@@ -41,6 +41,7 @@ namespace WinU_Hackathon2018
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            CortanaFunctions.RegisterVCD();
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,

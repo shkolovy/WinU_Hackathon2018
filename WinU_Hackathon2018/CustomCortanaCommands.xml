@@ -14,7 +14,7 @@
 
     <Command Name="OpenWebsiteCommand">
       <Example> Open a website </Example>
-      <ListenFor> Open [some] website </ListenFor>
+      <ListenFor> Open [some] website [please] </ListenFor>
       <Feedback> Opening your favourite website </Feedback>
       <Navigate/>
     </Command>
