@@ -74,6 +74,10 @@ namespace WinU_Hackathon2018
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+
+
+
+            var success =  Windows.System.Launcher.LaunchUriAsync(new Uri("Microsoft.MSPaint_5.1806.20057.0_x64__8wekyb3d8bbwe"));
         }
 
         /// <summary>

@@ -22,12 +22,18 @@ namespace WinU_Hackathon2018
             SpeechRecognitionResult result = cmd.Result;
             string commandName = result.RulePath[0];
 
+
+            
+
             var vcdLookup = new Dictionary<string, Delegate>{
 
                 {
                     "WatchVideoCommand", (Action)(async () =>
                     {
-                         Uri website = new Uri(@"http://www.office.com");
+                        
+
+
+                         Uri website = new Uri(@"http://localhost:56898/api/values/ss");
                          await Launcher.LaunchUriAsync(website);
                     })
                 },
