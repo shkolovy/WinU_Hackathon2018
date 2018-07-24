@@ -97,6 +97,13 @@ namespace WinU_Hackathon2018
                          CallApi("wordLetter");
                          action();
                     })
+                },
+                {
+                "WatchAVideoCommand", (Action)(async () =>
+                    {
+                         CallApi("youtube;" + result.Text.Trim().Replace("watch",""));
+                         action();
+                    })
                 }
 
             };
