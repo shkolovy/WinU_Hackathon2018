@@ -30,7 +30,7 @@ namespace WinU_Hackathon2018
                 // In a real app, these would be initialized with actual data
                 string title = "Are you happy with Windows U?";
                 string content = "Did that action helped you?";
-                string logo = "ms-appdata:///local/Andrew.jpg";
+                string logo = "ms-appdata:///Assets/Square44x44Logo.scale - 100.png";
 
                 // Construct the visuals of the toast
                 ToastVisual visual = new ToastVisual()
