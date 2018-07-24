@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,6 +9,10 @@ namespace WebApplication1.Controllers
 {
     public class ValuesController : ApiController
     {
+        private const string wordResume = "https://omextemplates.content.office.net/support/templates/en-us/tf16412149.docx";
+        private const string wordLetter = "https://omextemplates.content.office.net/support/templates/en-us/tf00002014.docx";
+        private const string powerpointBirthday = "https://omextemplates.content.office.net/support/templates/en-us/tf00001088.pptx";
+
         public string Get(string id)
         {
             switch (id)
@@ -27,9 +29,17 @@ namespace WebApplication1.Controllers
                 case "photo":
                     Photo();
                     break;
+                case "wordResume":
+                    Document(wordResume);
+                    break;
+                case "wordLetter":
+                    Document(wordLetter);
+                    break;
+                case "powerpointBirthday":
+                    Card(powerpointBirthday);
+                    break;
             }
 
-            //RunWin32Process(@"C:\Users\arshkolo\AppData\Roaming\Spotify\Spotify.exe");
             return "OK";
         }
 
@@ -79,22 +89,33 @@ namespace WebApplication1.Controllers
             }
         }
 
+        private void Document(string file)
+        {
+            RunWin32Process(@"C:\Program Files (x86)\Microsoft Office\root\Office16\winword.exe", file);
+        }
+
+        private void Card(string file)
+        {
+            RunWin32Process(@"C:\Program Files (x86)\Microsoft Office\root\Office16\powerpnt.exe", file);
+        }
+
         private void RunUStoreApp(string name)
         {
             MetroManager.MetroLauncher.LaunchApp(name);
         }
 
-        private void RunWin32Process(string path)
-	    {
-		    var p = new Process
-		    {
-			    StartInfo =
-			    {
-				    FileName = path,
-				    CreateNoWindow = true
-			    }
-		    };
-		    p.Start();
+        private void RunWin32Process(string path, string arg = "")
+        {
+            var p = new Process
+            {
+                StartInfo =
+                {
+                    FileName = path,
+                    CreateNoWindow = true,
+                    Arguments = arg
+                }
+            };
+            p.Start();
         }
     }
 }
