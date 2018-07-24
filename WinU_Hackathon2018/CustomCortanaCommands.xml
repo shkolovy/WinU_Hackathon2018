@@ -67,6 +67,12 @@
       <Feedback> Creating a letter with Word </Feedback>
       <Navigate/>
     </Command>
+    <Command Name="WatchAVideoCommand">
+      <Example> Watch a video </Example>
+      <ListenFor>watch {*} </ListenFor>
+      <Feedback> Alright let's watch </Feedback>
+      <Navigate/>
+    </Command>
 
   </CommandSet>
 
