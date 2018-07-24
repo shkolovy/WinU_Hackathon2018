@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.VoiceCommands;
@@ -17,31 +18,49 @@ namespace WinU_Hackathon2018
             await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(vcd);
         }
 
-        public static void RunCommand(VoiceCommandActivatedEventArgs cmd)
+        private static void CallApi(string id)
+        {
+            var client = new HttpClient();
+
+            var response = client.GetAsync($"http://localhost:56898/api/values/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                //good !
+            }
+        }
+
+        public static void RunCommand(VoiceCommandActivatedEventArgs cmd, Action action)
         {
             SpeechRecognitionResult result = cmd.Result;
             string commandName = result.RulePath[0];
 
-
-            
-
             var vcdLookup = new Dictionary<string, Delegate>{
-
                 {
                     "WatchVideoCommand", (Action)(async () =>
                     {
-                        
-
-
-                         Uri website = new Uri(@"http://localhost:56898/api/values/ss");
-                         await Launcher.LaunchUriAsync(website);
+                        CallApi("video");
+                        action();
                     })
                 },
                 {
-                  "OpenWebsiteCommand", (Action)(async () =>
+                "DrawingCommand", (Action)(async () =>
                     {
-                         Uri website = new Uri(@"http://www.office.com");
-                         await Launcher.LaunchUriAsync(website);
+                         CallApi("drawing");
+                         action();
+                    })
+                },
+                {
+                "PhotoEditCommand", (Action)(async () =>
+                    {
+                         CallApi("photo");
+                         action();
+                    })
+                },
+                {
+                "GoToMeetingCommand", (Action)(async () =>
+                    {
+                         CallApi("meeting");
+                         action();
                     })
                 }
             };

@@ -2,7 +2,7 @@
 
 <VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.2">
   <CommandSet xml:lang="en-us" Name="CustomCommands">
-    <CommandPrefix> Listen To Me </CommandPrefix>
+    <CommandPrefix> I would like to </CommandPrefix>
     <Example> Watch a video </Example>
 
     <Command Name="WatchVideoCommand">
@@ -12,13 +12,26 @@
       <Navigate/>
     </Command>
 
-    <Command Name="OpenWebsiteCommand">
-      <Example> Open a website </Example>
-      <ListenFor> Open [some] website [please] </ListenFor>
-      <Feedback> Opening your favourite website </Feedback>
+    <Command Name="DrawingCommand">
+      <Example> draw something </Example>
+      <ListenFor> draw [something] </ListenFor>
+      <Feedback> Opening Paint 3D </Feedback>
       <Navigate/>
     </Command>
     
+      <Command Name="PhotoEditCommand">
+      <Example> Edit some photo </Example>
+      <ListenFor> Edit [some] [a] photo </ListenFor>
+      <Feedback> Opening photo editor for you </Feedback>
+      <Navigate/>
+    </Command>
+    
+    <Command Name="GoToMeetingCommand">
+      <Example> Go to the meeting </Example>
+      <ListenFor> go to the [current] meeting </ListenFor>
+      <Feedback> Joining </Feedback>
+      <Navigate/>
+    </Command>
   </CommandSet>
 
 </VoiceCommands>
