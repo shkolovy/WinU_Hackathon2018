@@ -152,7 +152,7 @@ namespace WinU_Hackathon2018
                 {
                 "WriteLetterToCommand", (Action)(async () =>
                     {
-                         CallApi("wordLetter");
+                         CallApi("wordLetter;" + result.Text.Substring(result.Text.LastIndexOf(" to")+3).Trim());
                          action();
                     })
                 },
