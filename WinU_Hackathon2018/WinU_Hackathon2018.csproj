@@ -109,6 +109,8 @@
     <None Include="WinU_Hackathon2018_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
     <Content Include="CustomCortanaCommands.xml">
       <SubType>Designer</SubType>
     </Content>
