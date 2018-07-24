@@ -32,6 +32,42 @@
       <Feedback> Joining </Feedback>
       <Navigate/>
     </Command>
+
+    <Command Name="WriteBirthdayCardCommand">
+      <Example> Write a birthday card </Example>
+      <ListenFor> [Write] [Create] [a] birthday card </ListenFor>
+      <Feedback> Creating a birthday card with Powerpoint </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="WriteCVCommand">
+      <Example> Write a CV </Example>
+      <ListenFor> [Write] [Create] [a] CV </ListenFor>
+      <Feedback> Creating a CV with Word </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="WriteResumeCommand">
+      <Example> Write a resume </Example>
+      <ListenFor> [Write] [Create] [a] Resume </ListenFor>
+      <Feedback> Creating a Resume with Word </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="WriteLetterCommand">
+      <Example> Write a letter </Example>
+      <ListenFor> [Write] [Create] [a] letter </ListenFor>
+      <Feedback> Creating a letter with Word </Feedback>
+      <Navigate/>
+    </Command>
+
+    <Command Name="WriteLetterToCommand">
+      <Example> Write a letter </Example>
+      <ListenFor> [Write] [Create] [a] letter to {*} </ListenFor>
+      <Feedback> Creating a letter with Word </Feedback>
+      <Navigate/>
+    </Command>
+
   </CommandSet>
 
 </VoiceCommands>
