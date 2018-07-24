@@ -6,6 +6,10 @@ using System.Text.RegularExpressions;
 using System.Web.Configuration;
 using System.Web.Http;
 
+using System.IO;
+using DocumentFormat.OpenXml.Packaging;
+using System.Net;
+
 namespace WebApplication1.Controllers
 {
     public class ValuesController : ApiController
@@ -39,9 +43,17 @@ namespace WebApplication1.Controllers
                 case "powerpointBirthday":
                     Card(powerpointBirthday);
                     break;
+                default:
+                    if (id.StartsWith("youtube"))
+                    {
+                        YoutubeVideo(id);
+                    }
+                    else if (id.StartsWith("wordLetter;"))
+                    {
+                        DocumentContact(wordLetter, id.Replace("wordLetter;", "").Trim());
+                    }
+                    break;
             }
-
-            YoutubeVideo(id);
             
             return "OK";
         }
@@ -103,6 +115,38 @@ namespace WebApplication1.Controllers
         private void Document(string file)
         {
             RunWin32Process(@"C:\Program Files (x86)\Microsoft Office\root\Office16\winword.exe", file);
+        }
+
+        private void DocumentContact(string file, string param)
+        {
+            WebClient myWebClient = new WebClient();
+            string tempfile = Path.GetTempFileName();
+
+            myWebClient.DownloadFile(file, tempfile);
+
+            using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(tempfile, true))
+            {
+                string docText = null;
+                using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
+                {
+                    docText = sr.ReadToEnd();
+                }
+
+                Regex regexText = new Regex("\\[Recipient\\]");
+                docText = regexText.Replace(docText, "John");
+
+                using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
+                {
+                    sw.Write(docText);
+                }
+            }
+            File.SetAttributes(tempfile, FileAttributes.Hidden);
+            FileInfo fInfo = new FileInfo(tempfile);
+
+            // Set the IsReadOnly property.
+            fInfo.IsReadOnly = true;
+
+            RunWin32Process(@"C:\Program Files (x86)\Microsoft Office\root\Office16\winword.exe", tempfile);
         }
 
         private void Card(string file)

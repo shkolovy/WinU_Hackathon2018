@@ -63,10 +63,11 @@
 
     <Command Name="WriteLetterToCommand">
       <Example> Write a letter </Example>
-      <ListenFor> [Write] [Create] [a] letter to {*} </ListenFor>
+      <ListenFor> [Write] [Create] [a] letter to {PhraseTopic_Name} </ListenFor>
       <Feedback> Creating a letter with Word </Feedback>
       <Navigate/>
     </Command>
+    
     <Command Name="WatchAVideoCommand">
       <Example> Watch a video </Example>
       <ListenFor>watch {*} </ListenFor>
@@ -74,6 +75,12 @@
       <Navigate/>
     </Command>
 
+    <PhraseList Label="PhraseTopic_Name">
+      <Item> John </Item>
+      <Item> Mark </Item>
+      <Item> Dale </Item>
+    </PhraseList>
+    
   </CommandSet>
 
 </VoiceCommands>
