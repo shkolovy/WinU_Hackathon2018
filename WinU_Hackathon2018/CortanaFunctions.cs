@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using Windows.ApplicationModel;
@@ -6,6 +7,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.VoiceCommands;
 using Windows.Media.SpeechRecognition;
 using Windows.System;
+using Windows.UI.Notifications;
 
 namespace WinU_Hackathon2018
 {
@@ -25,7 +27,63 @@ namespace WinU_Hackathon2018
             var response = client.GetAsync($"http://localhost:56898/api/values/{id}").Result;
             if (response.IsSuccessStatusCode)
             {
-                //good !
+                // In a real app, these would be initialized with actual data
+                string title = "Are you happy with Windows U?";
+                string content = "Did that action helped you?";
+                string logo = "ms-appdata:///local/Andrew.jpg";
+
+                // Construct the visuals of the toast
+                ToastVisual visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = title
+                            },
+
+                            new AdaptiveText()
+                            {
+                                Text = content
+                            },
+                        },
+
+                        AppLogoOverride = new ToastGenericAppLogo()
+                        {
+                            Source = logo,
+                            HintCrop = ToastGenericAppLogoCrop.Circle
+                        }
+                    }
+                };
+
+                ToastContent toastContent = new ToastContent()
+                {
+                    Actions = new ToastActionsCustom()
+                    {
+                        Buttons =
+                        {
+                            new ToastButton("😃", "action=viewdetails&contentId=351")
+                            {
+                                ActivationType = ToastActivationType.Foreground
+                            },
+
+                            new ToastButton("🙁", "action=remindlater&contentId=351")
+                            {
+                                ActivationType = ToastActivationType.Background
+                            }
+                        }
+                    },
+                    Visual = visual,
+                    Duration = ToastDuration.Short
+                    
+                };
+                var toast = new ToastNotification(toastContent.GetXml());
+                toast.Tag = "18365";
+                toast.Group = "wallPosts";
+                ToastNotificationManager.CreateToastNotifier().Show(toast);
+
             }
         }
 
