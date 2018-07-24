@@ -62,7 +62,43 @@ namespace WinU_Hackathon2018
                          CallApi("meeting");
                          action();
                     })
+                },
+                {
+                "WriteBirthdayCardCommand", (Action)(async () =>
+                    {
+                         CallApi("powerpointBirthday");
+                         action();
+                    })
+                },
+                {
+                "WriteCVCommand", (Action)(async () =>
+                    {
+                         CallApi("wordResume");
+                         action();
+                    })
+                },
+                {
+                "WriteResumeCommand", (Action)(async () =>
+                    {
+                         CallApi("wordResume");
+                         action();
+                    })
+                },
+                {
+                "WriteLetterCommand", (Action)(async () =>
+                    {
+                         CallApi("wordLetter");
+                         action();
+                    })
+                },
+                {
+                "WriteLetterToCommand", (Action)(async () =>
+                    {
+                         CallApi("wordLetter");
+                         action();
+                    })
                 }
+
             };
 
             Delegate command;
