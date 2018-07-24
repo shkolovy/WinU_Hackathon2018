@@ -6,7 +6,6 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.VoiceCommands;
 using Windows.Media.SpeechRecognition;
-using Windows.System;
 using Windows.UI.Notifications;
 
 namespace WinU_Hackathon2018

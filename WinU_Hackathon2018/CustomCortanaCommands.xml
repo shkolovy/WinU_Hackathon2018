@@ -28,8 +28,8 @@
     
     <Command Name="GoToMeetingCommand">
       <Example> Go to the meeting </Example>
-      <ListenFor> connect to the current meeting </ListenFor>
-      <Feedback> Joining </Feedback>
+      <ListenFor> connect to the meeting </ListenFor>
+      <Feedback> Connection you to the meething </Feedback>
       <Navigate/>
     </Command>
 
