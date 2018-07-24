@@ -66,7 +66,7 @@ namespace WinU_Hackathon2018
                         {
                             new ToastButton("😃", "action=viewdetails&contentId=351")
                             {
-                                ActivationType = ToastActivationType.Foreground
+                                ActivationType = ToastActivationType.Background
                             },
 
                             new ToastButton("🙁", "action=remindlater&contentId=351")
