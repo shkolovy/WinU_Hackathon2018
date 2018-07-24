@@ -40,6 +40,8 @@ namespace WebApplication1.Controllers
                     break;
             }
 
+            YoutubeVideo(id);
+            
             return "OK";
         }
 
@@ -56,6 +58,14 @@ namespace WebApplication1.Controllers
         private void Video()
         {
 
+        }
+
+        private void YoutubeVideo(string id)
+        {
+            if (id.StartsWith("youtube;"))
+            {
+               Process.Start("https://www.youtube.com/results?search_query=" + id.Replace("youtube;", "").Trim().Replace(" ", "+"));
+            }
         }
 
         private void Meeting()
