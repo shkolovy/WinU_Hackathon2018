@@ -10,6 +10,7 @@ using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using System.Net;
 using System.Linq;
+using System;
 
 namespace WebApplication1.Controllers
 {
@@ -132,46 +133,19 @@ namespace WebApplication1.Controllers
         {
             WebClient myWebClient = new WebClient();
             string tempfile = Path.GetTempFileName();
-            myWebClient.DownloadFile(file, tempfile);
+            try
+            {
+                myWebClient.DownloadFile(file, tempfile);
+            }
+            catch
+            {
+                RunWin32Process(@"C:\Program Files (x86)\Microsoft Office\root\Office16\winword.exe");
+            }
 
             SimpleContact? contact = GetContactDetails(param);
-
             if (contact.HasValue)
             {
-                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(tempfile, true))
-                {
-                    string docText = null;
-                    using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
-                    {
-                        docText = sr.ReadToEnd();
-                    }
-
-                    {
-                        Regex regexText = new Regex("\\[Recipient\\]");
-                        docText = regexText.Replace(docText, contact?.GivenName);
-                    }
-
-                    using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
-                    {
-                        sw.Write(docText);
-                    }
-                    
-                    using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.HeaderParts.FirstOrDefault().GetStream()))
-                    {
-                        docText = sr.ReadToEnd();
-                    }
-
-                    {
-                        Regex regexText = new Regex("\\[Street .*>\\]");
-                        docText = regexText.Replace(docText, contact?.DisplayName + "<w:br/>" + contact?.Street + ", " + contact?.City + ", " + contact?.State + ", " + contact?.PostalCode);
-                    }
-
-                    using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.HeaderParts.FirstOrDefault().GetStream(FileMode.Create)))
-                    {
-                        sw.Write(docText);
-                    }
-
-                }
+                EditContactInfoInWordDocument(contact.GetValueOrDefault(), tempfile);
             }
 
             File.SetAttributes(tempfile, FileAttributes.Hidden);
@@ -183,36 +157,89 @@ namespace WebApplication1.Controllers
             RunWin32Process(@"C:\Program Files (x86)\Microsoft Office\root\Office16\winword.exe", tempfile);
         }
 
+        private void EditContactInfoInWordDocument(SimpleContact contact, string tempfile)
+        {
+            using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(tempfile, true))
+            {
+                string docText = null;
+                using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
+                {
+                    docText = sr.ReadToEnd();
+                }
+
+                if (!String.IsNullOrEmpty(contact.GivenName))
+                {
+                    Regex regexText = new Regex("\\[Recipient\\]");
+                    docText = regexText.Replace(docText, contact.GivenName);
+                }
+
+                using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
+                {
+                    sw.Write(docText);
+                }
+
+                using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.HeaderParts.FirstOrDefault().GetStream()))
+                {
+                    docText = sr.ReadToEnd();
+                }
+
+                if (!String.IsNullOrEmpty(contact.Street) ||
+                    !String.IsNullOrEmpty(contact.City) ||
+                    !String.IsNullOrEmpty(contact.State) ||
+                    !String.IsNullOrEmpty(contact.PostalCode) )
+                {
+                    Regex regexText = new Regex("\\[Street .*>\\]");
+                    docText = regexText.Replace(docText, contact.DisplayName + "<w:br/>"
+                        + contact.Street + ", " 
+                        + contact.City + ", " 
+                        + contact.State + ", " 
+                        + contact.PostalCode);
+                }
+
+                using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.HeaderParts.FirstOrDefault().GetStream(FileMode.Create)))
+                {
+                    sw.Write(docText);
+                }
+
+            }
+        }
+
         private SimpleContact? GetContactDetails(string text)
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", WebConfigurationManager.AppSettings["graphApiTocken"]);
             string request = "https://graph.microsoft.com/v1.0/me/contacts";
             var response = client.GetAsync(request).Result;
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                try
-                {
-                    var contents = response.Content.ReadAsStringAsync().Result;
+                return null;
+            }
+            try
+            {
+                var contents = response.Content.ReadAsStringAsync().Result;
 
-                    dynamic jsonResponse = JsonConvert.DeserializeObject(contents);
-                    SimpleContact contact = new SimpleContact
+                dynamic jsonResponse = JsonConvert.DeserializeObject(contents);
+                for (int i = 0; i < jsonResponse.value.Count; i++)
+                {
+                    if (jsonResponse.value[i].givenName.ToString().StartsWith(text) ||
+                        jsonResponse.value[i].surname.ToString().StartsWith(text) ||
+                        jsonResponse.value[i].nickName.ToString().StartsWith(text))
                     {
-                        GivenName = jsonResponse.value[0].givenName.ToString(),
-                        DisplayName = jsonResponse.value[0].displayName.ToString(),
-                        Street = jsonResponse.value[0].homeAddress.street.ToString(),
-                        City = jsonResponse.value[0].homeAddress.city.ToString(),
-                        State = jsonResponse.value[0].homeAddress.state.ToString(),
-                        PostalCode = jsonResponse.value[0].homeAddress.postalCode.ToString()
-                    };
-
-                    return contact;
-
+                        return new SimpleContact
+                        {
+                            GivenName = text,
+                            DisplayName = jsonResponse.value[i].displayName.ToString(),
+                            Street = jsonResponse.value[i].homeAddress.street.ToString(),
+                            City = jsonResponse.value[i].homeAddress.city.ToString(),
+                            State = jsonResponse.value[i].homeAddress.state.ToString(),
+                            PostalCode = jsonResponse.value[i].homeAddress.postalCode.ToString()
+                        };
+                    }
                 }
-                catch
-                {
-                    // no meetings
-                }
+            }
+            catch
+            {
+                // no contact
             }
             return null;
         }

@@ -79,6 +79,9 @@
       <Item> John </Item>
       <Item> Mark </Item>
       <Item> Dale </Item>
+      <Item> Paul </Item>
+      <Item> Grandma </Item>
+      <Item> Mike </Item>
     </PhraseList>
     
   </CommandSet>
