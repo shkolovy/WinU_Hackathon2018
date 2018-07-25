@@ -29,7 +29,7 @@
     <Command Name="GoToMeetingCommand">
       <Example> Go to the meeting </Example>
       <ListenFor> connect to the meeting </ListenFor>
-      <Feedback> Connection you to the meething </Feedback>
+      <Feedback> Connecting you to the meething </Feedback>
       <Navigate/>
     </Command>
 
